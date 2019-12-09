@@ -1,0 +1,310 @@
+<template>
+  <div id="app">
+    <v-app>
+      <v-navigation-drawer
+        fixed
+        v-model="drawer"
+        app
+      >
+        <v-list>
+          <v-list-item 
+            router
+            :to="item.to"
+            :key="i"
+            v-for="(item, i) in items"
+            exact
+          >
+            <v-list-item-action>
+              <v-icon v-html="item.icon"></v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+      <v-toolbar fixed app dark color="pink lighten-2">
+        <v-toolbar-side-icon @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
+        <v-toolbar-title v-text="title"></v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon>
+          <v-icon>search</v-icon>
+        </v-btn>
+        <v-btn
+          icon
+        >
+          <v-icon>more_vert</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-content>
+        <v-container fluid fill-height>
+          <v-slide-y-transition mode="out-in">
+            <router-view></router-view>
+          </v-slide-y-transition>
+        </v-container>
+      </v-content>
+    </v-app>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'todo',
+    data: () => ({
+      drawer: false,
+      items: [
+        { icon: 'apps', title: 'Welcome', to: '/' },
+        { icon: 'bubble_chart', title: 'Inspire', to: '/inspire' }
+      ],
+      title: 'ToDo'
+    })
+  }
+</script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons');
+  /* Global CSS */
+</style>
+
+
+
+
+
+<template>
+  <v-app id="inspire">
+    <v-navigation-drawer
+      v-model="drawerRight"
+      app
+      clipped
+      right
+    >
+      <v-list dense>
+        <v-list-item @click.stop="right = !right">
+          <v-list-item-action>
+            <v-icon>mdi-exit-to-app</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Open Temporary Drawer</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar
+      app
+      clipped-right
+      color="blue-grey"
+      dark
+    >
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-toolbar-title>Develop Arrange</v-toolbar-title>
+      <v-spacer />
+      <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight" />
+    </v-app-bar>
+
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+    >
+      <v-list dense>
+        <v-list-item @click.stop="left = !left">
+          <v-list-item-action>
+            <v-icon>mdi-exit-to-app</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Open Temporary Drawer</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-navigation-drawer
+      v-model="left"
+      fixed
+      temporary
+    />
+
+    <v-content>
+      <v-container
+        
+        fluid
+      >
+        <v-btn class="ma-2" tile outlined color="success">
+          <v-icon left>mdi-pencil</v-icon> Edit
+        </v-btn>
+
+        <v-data-table
+          :headers="headers"
+          :items="desserts"
+          :items-per-page="5"
+          class="elevation-1"
+        ></v-data-table>
+
+        <!--
+        <v-row
+          justify="center"
+          align="center"
+        >
+          <v-col class="shrink">
+            <v-tooltip right>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  :href="source"
+                  icon
+                  large
+                  target="_blank"
+                  v-on="on"
+                >
+                  <v-icon large>mdi-code-tags</v-icon>
+                </v-btn>
+              </template>
+              <span>Source</span>
+            </v-tooltip>
+            <v-tooltip right>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  icon
+                  large
+                  href="https://codepen.io/johnjleider/pen/QewYYx"
+                  target="_blank"
+                  v-on="on"
+                >
+                  <v-icon large>mdi-codepen</v-icon>
+                </v-btn>
+              </template>
+              <span>Codepen</span>
+            </v-tooltip>
+          </v-col>
+        </v-row>
+        -->
+      </v-container>
+    </v-content>
+
+    <v-navigation-drawer
+      v-model="right"
+      fixed
+      right
+      temporary
+    />
+
+    <v-footer
+      app
+      color="blue-grey"
+      class="white--text"
+    >
+      <span>Vuetify</span>
+      <v-spacer />
+      <span>&copy; 2019</span>
+    </v-footer>
+  </v-app>
+</template>
+
+<script>
+  export default {
+    props: {
+      source: String,
+    },
+    data: () => ({
+      drawer: null,
+      drawerRight: null,
+      right: false,
+      left: false,
+
+      headers: [
+          {
+            text: 'Dessert (100g serving)',
+            align: 'left',
+            sortable: false,
+            value: 'name',
+          },
+          { text: 'Calories', value: 'calories' },
+          { text: 'Fat (g)', value: 'fat' },
+          { text: 'Carbs (g)', value: 'carbs' },
+          { text: 'Protein (g)', value: 'protein' },
+          { text: 'Iron (%)', value: 'iron' },
+        ],
+        desserts: [
+          {
+            name: 'Frozen Yogurt',
+            calories: 159,
+            fat: 6.0,
+            carbs: 24,
+            protein: 4.0,
+            iron: '1%',
+          },
+          {
+            name: 'Ice cream sandwich',
+            calories: 237,
+            fat: 9.0,
+            carbs: 37,
+            protein: 4.3,
+            iron: '1%',
+          },
+          {
+            name: 'Eclair',
+            calories: 262,
+            fat: 16.0,
+            carbs: 23,
+            protein: 6.0,
+            iron: '7%',
+          },
+          {
+            name: 'Cupcake',
+            calories: 305,
+            fat: 3.7,
+            carbs: 67,
+            protein: 4.3,
+            iron: '8%',
+          },
+          {
+            name: 'Gingerbread',
+            calories: 356,
+            fat: 16.0,
+            carbs: 49,
+            protein: 3.9,
+            iron: '16%',
+          },
+          {
+            name: 'Jelly bean',
+            calories: 375,
+            fat: 0.0,
+            carbs: 94,
+            protein: 0.0,
+            iron: '0%',
+          },
+          {
+            name: 'Lollipop',
+            calories: 392,
+            fat: 0.2,
+            carbs: 98,
+            protein: 0,
+            iron: '2%',
+          },
+          {
+            name: 'Honeycomb',
+            calories: 408,
+            fat: 3.2,
+            carbs: 87,
+            protein: 6.5,
+            iron: '45%',
+          },
+          {
+            name: 'Donut',
+            calories: 452,
+            fat: 25.0,
+            carbs: 51,
+            protein: 4.9,
+            iron: '22%',
+          },
+          {
+            name: 'KitKat',
+            calories: 518,
+            fat: 26.0,
+            carbs: 65,
+            protein: 7,
+            iron: '6%',
+          },
+        ]
+    }),
+  }
+</script>
